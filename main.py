@@ -6,18 +6,21 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Server is Running!"
+    return "SERVER IS LIVE"
 
 @app.route('/remove-bg', methods=['POST'])
 def remove_bg():
+    # Hum check kar rahe hain ki 'image_file' naam ka data aaya ya nahi
     if 'image_file' not in request.files:
-        return {"error": "No file uploaded"}, 400
+        return "No image_file found in request", 400
     
-    file = request.files['image_file']
-    input_image = file.read()
-    output_image = remove(input_image)
-    
-    return send_file(io.BytesIO(output_image), mimetype='image/png')
+    try:
+        file = request.files['image_file']
+        input_image = file.read()
+        output_image = remove(input_image)
+        return send_file(io.BytesIO(output_image), mimetype='image/png')
+    except Exception as e:
+        return str(e), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=10000)
